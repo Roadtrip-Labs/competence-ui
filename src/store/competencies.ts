@@ -50,11 +50,12 @@ const initialState: UserCompetencies  = [
 ]
 
 export const getCompetencies = createAsyncThunk('userCompetencies/getCompetencies', async (params, { rejectWithValue }) => {
-  const response = await axiosInstance.get('/get-users-competencies')
-  if (response.data.error) {
-    return rejectWithValue(response.data.error.message)
+  const response = await fetch('http://localhost:5000/get-users-competencies', { method: 'get', mode: 'cors' })
+  const json = await response.json()
+  if (json.data.error) {
+    return rejectWithValue(json.data.error.message)
   }
-  const data = response.data as UserCompetencies
+  const data = json.data as UserCompetencies
   return data
 })
 
