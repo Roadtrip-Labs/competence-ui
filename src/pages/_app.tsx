@@ -7,9 +7,9 @@ import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
-
-
-
+// ** Store Imports
+import { store } from 'src/store'
+import { Provider } from 'react-redux'
 
 // ** Loader Import
 import NProgress from 'nprogress'
@@ -118,7 +118,7 @@ const App = (props: ExtendedAppProps) => {
   const aclAbilities = Component.acl ?? defaultACLObj
 
   return (
-    
+    <Provider store={store}>
       <CacheProvider value={emotionCache}>
         <Head>
           <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
@@ -151,7 +151,7 @@ const App = (props: ExtendedAppProps) => {
           </SettingsProvider>
         </AuthProvider>
       </CacheProvider>
-   
+    </Provider>
   )
 }
 

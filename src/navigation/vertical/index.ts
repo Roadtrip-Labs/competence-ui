@@ -6,19 +6,19 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Home',
       path: '/home',
-      icon: 'mdi:home-outline',
+      icon: 'mdi:people'
     },
     {
-      title: 'Second Page',
-      path: '/second-page',
-      icon: 'mdi:email-outline',
+      title: 'Profile',
+      path: '/profile/*',
+      icon: 'mdi:person'
     },
     {
       path: '/acl',
       action: 'read',
       subject: 'acl-page',
       title: 'Access Control',
-      icon: 'mdi:shield-outline',
+      icon: 'mdi:shield-outline'
     }
   ]
 }
