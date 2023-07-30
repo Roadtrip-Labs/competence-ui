@@ -11,8 +11,7 @@ const axiosInstance = axios.create({
     'Access-Control-Allow-Origin': '*',
     "Access-Control-Request-Headers": "X-Requested-With",
     'Content-Type': 'application/json'
-  },
-  withCredentials: true
+  }
 })
 
 export enum UserCompetenciesStatus {
