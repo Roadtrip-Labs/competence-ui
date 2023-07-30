@@ -9,6 +9,7 @@ const axiosInstance = axios.create({
   baseURL: 'https://api.successsummit.io',
   headers: {
     'Access-Control-Allow-Origin': '*',
+    "Access-Control-Request-Headers": "X-Requested-With",
     'Content-Type': 'application/json'
   },
   withCredentials: true
@@ -43,7 +44,11 @@ const initialState = [
 
 export const getUserCompetencies = createAsyncThunk('userCompetencies/getCompetencies', async (params, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.get('/get-users-competencies')
+    const response = await axiosInstance.get('/get-users-competencies', {
+      headers: {
+        "Access-Control-Request-Method": "GET",
+      }
+    })
     if (response.data.error) {
       return rejectWithValue(response.data.error.message)
     }
