@@ -2,11 +2,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 // ** Reducers
-import compentencies from 'src/store/competencies'
+import users from 'src/store/users'
 
 export const store = configureStore({
   reducer: {
-    compentencies
+    users
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

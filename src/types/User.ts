@@ -1,3 +1,11 @@
+export type User = {
+  id: number
+  name: string
+  compentencies: UserCompetency[]
+}
+
+export type Users = User[]
+
 export type UserCompetency = {
   id: number
   name: string
@@ -9,11 +17,3 @@ export type UserCompetency = {
   updated_at: string
   user_id: number
 }
-
-export type UserCompetencies = [
-  {
-    id: number
-    name: string
-    compentencies: UserCompetency[]
-  }
-]

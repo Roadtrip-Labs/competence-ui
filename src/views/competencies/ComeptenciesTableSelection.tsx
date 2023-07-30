@@ -24,7 +24,7 @@ import { getInitials } from 'src/@core/utils/get-initials'
 
 // ** Data Import
 import { rows } from 'src/@fake-db/table/static-data'
-import { getCompetencies } from 'src/store/competencies'
+import { getUserCompetencies } from 'src/store/users'
 
 interface StatusObj {
   [key: number]: {
@@ -151,10 +151,10 @@ const UserCompetenciesTable = (params: UserCompetenciesTableParams) => {
   const dispatch = useDispatch<AppDispatch>()
   console.log('Getting competencies for user: ', params.userId)
   useEffect(() => {
-    dispatch(getCompetencies()).unwrap()
+    dispatch(getUserCompetencies()).unwrap()
   }, [])
-  const store = useSelector((state: RootState) => state.compentencies)
-  console.log('Store: ', store.users)
+  const store = useSelector((state: RootState) => state.users)
+  console.log('Store: ', store)
 
   return (
     <Card>

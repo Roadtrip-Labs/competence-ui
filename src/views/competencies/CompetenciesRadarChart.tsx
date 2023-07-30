@@ -6,43 +6,45 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 
-// ** Redux Imports
-import { useSelector, useDispatch } from 'react-redux'
-import { RootState, AppDispatch } from 'src/store'
-
-// ** Store & Actions
-import { getCompetencies } from 'src/store/competencies'
-
 // ** Third Party Imports
 import { Radar } from 'react-chartjs-2'
 import { ChartData, ChartOptions } from 'chart.js'
-import { UserCompetency } from 'src/types/UserCompetency'
+
+// ** Types
+import { Users, UserCompetency } from 'src/types/User'
 
 interface RadarProps {
   labelColor: string
   borderColor: string
   legendColor: string
+  users: Users
 }
 
 const CompetenciesRadarChart = (props: RadarProps) => {
   // ** Props
-  const { labelColor, legendColor, borderColor } = props
-
-  // ** States
-  const dispatch = useDispatch<AppDispatch>()
-  const store = useSelector((state: RootState) => state.compentencies)
-
-  useEffect(() => {
-    dispatch(getCompetencies()).unwrap()
-  }, [])
+  const { users, labelColor, legendColor, borderColor } = props
 
   const [chartData, setChartData] = useState<ChartData<'radar'>>({
-    datasets: store.users.map((user) => ({
-      label: user.name,
-      data: user.compentencies.map((compentency: UserCompetency) => compentency.proficiency_level),
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgba(255, 99, 132, 1)'
-    })),
+    datasets: [
+      {
+        fill: true,
+        label: 'Max Stumpf',
+        borderColor: 'transparent',
+        backgroundColor: labelColor,
+        data: [25, 59, 90, 81, 60, 82],
+        pointBorderColor: 'transparent',
+        pointBackgroundColor: 'transparent'
+      },
+      {
+        fill: true,
+        label: 'Vincent Williams',
+        borderColor: 'transparent',
+        backgroundColor: legendColor,
+        data: [40, 100, 40, 90, 40, 90],
+        pointBorderColor: 'transparent',
+        pointBackgroundColor: 'transparent'
+      }
+    ]
   })
 
   // ** Hooks
@@ -91,23 +93,23 @@ const CompetenciesRadarChart = (props: RadarProps) => {
       gradientRed.addColorStop(1, 'rgba(255,161,161, 0.8)')
 
       const chartData = {
-        labels: ['Communication', 'Strength Training', 'Programming', 'Cooking', 'CHA', 'INT'],
+        labels: users[0].compentencies.map((compentency: UserCompetency) => compentency.name),
         datasets: [
           {
             fill: true,
-            label: 'Max Stumpf',
+            label: users[0].name,
             borderColor: 'transparent',
             backgroundColor: gradientRed,
-            data: [25, 59, 90, 81, 60, 82],
+            data: users[0].compentencies.map((compentency: UserCompetency) => compentency.proficiency_level),
             pointBorderColor: 'transparent',
             pointBackgroundColor: 'transparent'
           },
           {
             fill: true,
-            label: 'Vincent Williams',
+            label: users[1].name,
             borderColor: 'transparent',
             backgroundColor: gradientBlue,
-            data: [40, 100, 40, 90, 40, 90],
+            data: users[1].compentencies.map((compentency: UserCompetency) => compentency.proficiency_level),
             pointBorderColor: 'transparent',
             pointBackgroundColor: 'transparent'
           }

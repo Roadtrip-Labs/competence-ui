@@ -10,7 +10,7 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Profile',
-      path: '/profile/*',
+      path: '/profile?id=1',
       icon: 'mdi:person'
     },
     {

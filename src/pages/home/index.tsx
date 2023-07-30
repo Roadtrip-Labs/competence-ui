@@ -1,3 +1,6 @@
+// ** React Imports
+import { useEffect } from 'react'
+
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
@@ -6,8 +9,15 @@ import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import { useTheme } from '@mui/material/styles'
 
-// ** Chartjs Imports
-import ChartjsRadarChart from 'src/views/charts/chartjs/ChartjsRadarChart'
+// ** Redux Imports
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState, AppDispatch } from 'src/store'
+
+// ** Store & Actions
+import { getUserCompetencies } from 'src/store/users'
+
+// ** Components Imports
+import CompetenciesRadarChart from 'src/views/competencies/CompetenciesRadarChart'
 
 // ** Third Party Styles Import
 import 'chart.js/auto'
@@ -15,6 +25,14 @@ import 'chart.js/auto'
 const Home = () => {
   // ** Hook
   const theme = useTheme()
+
+  // ** States
+  const dispatch = useDispatch<AppDispatch>()
+  const store = useSelector((state: RootState) => state)
+
+  useEffect(() => {
+    dispatch(getUserCompetencies()).unwrap()
+  }, [])
 
   // Vars
   const borderColor = theme.palette.divider
@@ -33,7 +51,12 @@ const Home = () => {
         </Card>
       </Grid>
       <Grid item xs={12} md={6}>
-        <ChartjsRadarChart labelColor={labelColor} legendColor={legendColor} borderColor={borderColor} />
+        <CompetenciesRadarChart
+          users={store.users}
+          labelColor={labelColor}
+          legendColor={legendColor}
+          borderColor={borderColor}
+        />
       </Grid>
     </Grid>
   )
