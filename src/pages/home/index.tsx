@@ -31,7 +31,7 @@ const Home = () => {
   const store = useSelector((state: RootState) => state)
 
   useEffect(() => {
-    dispatch(getUserCompetencies()).unwrap()
+    dispatch(getUserCompetencies()).unwrap().catch((e) => console.log(e))
   }, [])
 
   // Vars

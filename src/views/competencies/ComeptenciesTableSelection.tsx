@@ -151,7 +151,7 @@ const UserCompetenciesTable = (params: UserCompetenciesTableParams) => {
   const dispatch = useDispatch<AppDispatch>()
   console.log('Getting competencies for user: ', params.userId)
   useEffect(() => {
-    dispatch(getUserCompetencies()).unwrap()
+    dispatch(getUserCompetencies()).unwrap().catch((e) => console.log(e))
   }, [])
   const store = useSelector((state: RootState) => state.users)
   console.log('Store: ', store)
