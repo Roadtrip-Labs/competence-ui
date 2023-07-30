@@ -6,7 +6,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { Users } from 'src/types/User'
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_API_BASE_URL
+  baseURL: "https://api.successsummit.io"
 })
 
 export enum UserCompetenciesStatus {
