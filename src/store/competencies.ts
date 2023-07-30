@@ -6,7 +6,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 
 const axiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:5000'
+  baseURL: 'https://api.successsummit.io'
 })
 
 type UserCompetency = {
@@ -50,13 +50,16 @@ const initialState: UserCompetencies  = [
 ]
 
 export const getCompetencies = createAsyncThunk('userCompetencies/getCompetencies', async (params, { rejectWithValue }) => {
-  const response = await fetch('http://localhost:5000/get-users-competencies', { method: 'get', mode: 'cors' })
-  const json = await response.json()
-  if (json.data.error) {
-    return rejectWithValue(json.data.error.message)
+  try {
+    const response = await axiosInstance.get('/get-users-competencies')
+    if (response.data.error) {
+      return rejectWithValue(response.data.error.message)
+    }
+    const competencies = response.data as UserCompetencies
+    return competencies
+  } catch (e: any) {
+    return rejectWithValue(e.message)
   }
-  const data = json.data as UserCompetencies
-  return data
 })
 
 const compentenciesSlice = createSlice({
