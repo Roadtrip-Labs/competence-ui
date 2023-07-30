@@ -8,7 +8,7 @@ import { Users } from 'src/types/User'
 const axiosInstance = axios.create({
   baseURL: 'https://api.successsummit.io',
   headers: {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': 'https://api.successsummit.io',
     "Access-Control-Request-Headers": "X-Requested-With",
     'Content-Type': 'application/json'
   }
