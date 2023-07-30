@@ -1,5 +1,5 @@
 // ** React Import
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -7,6 +7,10 @@ import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid'
+
+// ** Redux Imports
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState, AppDispatch } from 'src/store'
 
 // ** Custom Components
 import CustomChip from 'src/@core/components/mui/chip'
@@ -20,6 +24,7 @@ import { getInitials } from 'src/@core/utils/get-initials'
 
 // ** Data Import
 import { rows } from 'src/@fake-db/table/static-data'
+import { getCompetencies } from 'src/store/competencies'
 
 interface StatusObj {
   [key: number]: {
@@ -137,16 +142,23 @@ const columns: GridColumns = [
 ]
 
 type UserCompetenciesTableParams = {
-  id: string
+  userId: string
 }
 
 const UserCompetenciesTable = (params: UserCompetenciesTableParams) => {
   // ** State
   const [pageSize, setPageSize] = useState<number>(7)
+  const dispatch = useDispatch<AppDispatch>()
+  console.log('Getting competencies for user: ', params.userId)
+  useEffect(() => {
+    dispatch(getCompetencies()).unwrap()
+  }, [])
+  const store = useSelector((state: RootState) => state.compentencies)
+  console.log('Store: ', store.users)
 
   return (
     <Card>
-      <CardHeader title='Selection' />
+      <CardHeader title='User Compentencies' />
       <DataGrid
         autoHeight
         rows={rows}
