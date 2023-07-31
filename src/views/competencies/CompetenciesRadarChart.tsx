@@ -126,7 +126,7 @@ const CompetenciesRadarChart = (props: RadarProps) => {
     <Card>
       <CardHeader title='Competency Overlap' />
       <CardContent>
-        <Radar height={350} ref={chartRef} data={chartData} options={options} />
+        <Radar height={800} ref={chartRef} data={chartData} options={options} />
       </CardContent>
     </Card>
   )
