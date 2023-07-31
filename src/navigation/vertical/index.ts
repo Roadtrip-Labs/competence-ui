@@ -9,16 +9,14 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'mdi:people'
     },
     {
-      title: 'Profile',
-      path: '/profile?id=1',
+      title: 'Vincent',
+      path: '/profile/1',
       icon: 'mdi:person'
     },
     {
-      path: '/acl',
-      action: 'read',
-      subject: 'acl-page',
-      title: 'Access Control',
-      icon: 'mdi:shield-outline'
+      title: 'Max',
+      path: '/profile/2',
+      icon: 'mdi:person'
     }
   ]
 }

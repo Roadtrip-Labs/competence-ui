@@ -1,6 +1,3 @@
-// ** React Import
-import { useState, useEffect } from 'react'
-
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -8,79 +5,23 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid'
 
-// ** Redux Imports
-import { useSelector, useDispatch } from 'react-redux'
-import { RootState, AppDispatch } from 'src/store'
-
-// ** Custom Components
-import CustomChip from 'src/@core/components/mui/chip'
-import CustomAvatar from 'src/@core/components/mui/avatar'
-
-// ** Types Imports
-import { ThemeColor } from 'src/@core/layouts/types'
-
-// ** Utils Import
-import { getInitials } from 'src/@core/utils/get-initials'
-
 // ** Data Import
-import { rows } from 'src/@fake-db/table/static-data'
-import { getUserCompetencies } from 'src/store/users'
-
-interface StatusObj {
-  [key: number]: {
-    title: string
-    color: ThemeColor
-  }
-}
-
-// ** renders client column
-const renderClient = (params: GridRenderCellParams) => {
-  const { row } = params
-  const stateNum = Math.floor(Math.random() * 6)
-  const states = ['success', 'error', 'warning', 'info', 'primary', 'secondary']
-  const color = states[stateNum]
-
-  if (row.avatar.length) {
-    return <CustomAvatar src={`/images/avatars/${row.avatar}`} sx={{ mr: 3, width: '1.875rem', height: '1.875rem' }} />
-  } else {
-    return (
-      <CustomAvatar
-        skin='light'
-        color={color as ThemeColor}
-        sx={{ mr: 3, fontSize: '.8rem', width: '1.875rem', height: '1.875rem' }}
-      >
-        {getInitials(row.full_name ? row.full_name : 'John Doe')}
-      </CustomAvatar>
-    )
-  }
-}
-
-const statusObj: StatusObj = {
-  1: { title: 'current', color: 'primary' },
-  2: { title: 'professional', color: 'success' },
-  3: { title: 'rejected', color: 'error' },
-  4: { title: 'resigned', color: 'warning' },
-  5: { title: 'applied', color: 'info' }
-}
+import { User } from 'src/types/User'
 
 const columns: GridColumns = [
   {
     flex: 0.25,
     minWidth: 290,
-    field: 'full_name',
+    field: 'name',
     headerName: 'Name',
     renderCell: (params: GridRenderCellParams) => {
       const { row } = params
 
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {renderClient(params)}
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-              {row.full_name}
-            </Typography>
-            <Typography noWrap variant='caption'>
-              {row.email}
+              {row.name}
             </Typography>
           </Box>
         </Box>
@@ -90,84 +31,69 @@ const columns: GridColumns = [
   {
     flex: 0.175,
     minWidth: 120,
-    headerName: 'Date',
-    field: 'start_date',
+    headerName: 'Description',
+    field: 'description',
     renderCell: (params: GridRenderCellParams) => (
       <Typography variant='body2' sx={{ color: 'text.primary' }}>
-        {params.row.start_date}
+        {params.row.description}
       </Typography>
     )
   },
   {
     flex: 0.175,
     minWidth: 110,
-    field: 'salary',
-    headerName: 'Salary',
+    field: 'proficiency_level',
+    headerName: 'Proficiency Level',
     renderCell: (params: GridRenderCellParams) => (
       <Typography variant='body2' sx={{ color: 'text.primary' }}>
-        {params.row.salary}
+        {params.row.proficiency_level}
       </Typography>
     )
   },
   {
     flex: 0.125,
-    field: 'age',
+    field: 'goal_level',
     minWidth: 80,
-    headerName: 'Age',
+    headerName: 'Goal Level',
     renderCell: (params: GridRenderCellParams) => (
       <Typography variant='body2' sx={{ color: 'text.primary' }}>
-        {params.row.age}
+        {params.row.goal_level}
       </Typography>
     )
   },
   {
     flex: 0.175,
-    minWidth: 140,
-    field: 'status',
-    headerName: 'Status',
-    renderCell: (params: GridRenderCellParams) => {
-      const status = statusObj[params.row.status]
-
-      return (
-        <CustomChip
-          size='small'
-          skin='light'
-          color={status.color}
-          label={status.title}
-          sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-        />
-      )
-    }
+    minWidth: 110,
+    field: 'updated_at',
+    headerName: 'Last Updated',
+    renderCell: (params: GridRenderCellParams) => (
+      <Typography variant='body2' sx={{ color: 'text.primary' }}>
+        {params.row.updated_at}
+      </Typography>
+    )
   }
 ]
 
 type UserCompetenciesTableParams = {
-  userId: string
+  user: User
 }
 
 const UserCompetenciesTable = (params: UserCompetenciesTableParams) => {
-  // ** State
-  const [pageSize, setPageSize] = useState<number>(7)
-  const dispatch = useDispatch<AppDispatch>()
-  console.log('Getting competencies for user: ', params.userId)
-  useEffect(() => {
-    dispatch(getUserCompetencies()).unwrap()
-  }, [dispatch])
-  const store = useSelector((state: RootState) => state.users)
-  console.log('Store table: ', store)
-
   return (
     <Card>
       <CardHeader title='User Competencies' />
-      <DataGrid
-        autoHeight
-        rows={rows}
-        columns={columns}
-        checkboxSelection
-        pageSize={pageSize}
-        rowsPerPageOptions={[7, 10, 25, 50]}
-        onPageSizeChange={newPageSize => setPageSize(newPageSize)}
-      />
+      {params.user.competencies ?
+        <DataGrid
+          autoHeight
+          columns={columns}
+          rows={params.user.competencies}
+          rowsPerPageOptions={[5, 10, 20]}
+        />
+      :
+        <Typography variant='body2' sx={{ color: 'text.primary' }}>
+          No competencies found for user {params.user.name}
+        </Typography>
+      }
     </Card>
   )
 }
