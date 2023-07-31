@@ -23,25 +23,7 @@ export enum UserCompetenciesStatus {
 
 const initialState = {
   status: UserCompetenciesStatus.IDLE,
-  users: [
-    {
-      id: 0,
-      name: 'Vincent',
-      competencies: [
-        {
-          id: 0,
-          name: 'Competency 1',
-          description: 'Competency 1',
-          proficiency_level: 1,
-          goal_level: 1,
-          relevance_level: 1,
-          created_at: '2021-08-01T00:00:00.000000Z',
-          updated_at: '2021-08-01T00:00:00.000000Z',
-          user_id: 1
-        }
-      ]
-    }
-  ]
+  users: [] as Users,
 }
 
 export const getUserCompetencies = createAsyncThunk('userCompetencies/getCompetencies', async (params, { rejectWithValue }) => {
