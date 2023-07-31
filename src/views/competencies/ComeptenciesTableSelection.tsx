@@ -151,14 +151,14 @@ const UserCompetenciesTable = (params: UserCompetenciesTableParams) => {
   const dispatch = useDispatch<AppDispatch>()
   console.log('Getting competencies for user: ', params.userId)
   useEffect(() => {
-    dispatch(getUserCompetencies()).unwrap().catch((e) => console.log(e))
-  }, [])
+    dispatch(getUserCompetencies()).unwrap()
+  }, [dispatch])
   const store = useSelector((state: RootState) => state.users)
-  console.log('Store: ', store)
+  console.log('Store table: ', store)
 
   return (
     <Card>
-      <CardHeader title='User Compentencies' />
+      <CardHeader title='User Competencies' />
       <DataGrid
         autoHeight
         rows={rows}

@@ -1,7 +1,7 @@
 export type User = {
   id: number
   name: string
-  compentencies: UserCompetency[]
+  competencies: UserCompetency[]
 }
 
 export type Users = User[]

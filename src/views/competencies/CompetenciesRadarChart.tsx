@@ -24,6 +24,8 @@ const CompetenciesRadarChart = (props: RadarProps) => {
   // ** Props
   const { users, labelColor, legendColor, borderColor } = props
 
+  console.log("Radar chart users: ", users)
+
   const [chartData, setChartData] = useState<ChartData<'radar'>>({
     datasets: [
       {
@@ -81,7 +83,7 @@ const CompetenciesRadarChart = (props: RadarProps) => {
   }
 
   useEffect(() => {
-    if (!chartRef.current) {
+    if (!chartRef.current || users.length < 2) {
       return
     } else {
       const gradientBlue = chartRef.current.ctx.createLinearGradient(0, 0, 0, 150)
@@ -93,14 +95,14 @@ const CompetenciesRadarChart = (props: RadarProps) => {
       gradientRed.addColorStop(1, 'rgba(255,161,161, 0.8)')
 
       const chartData = {
-        labels: users[0].compentencies.map((compentency: UserCompetency) => compentency.name),
+        labels: users[0].competencies.map((compentency: UserCompetency) => compentency.name),
         datasets: [
           {
             fill: true,
             label: users[0].name,
             borderColor: 'transparent',
             backgroundColor: gradientRed,
-            data: users[0].compentencies.map((compentency: UserCompetency) => compentency.proficiency_level),
+            data: users[0].competencies.map((compentency: UserCompetency) => compentency.proficiency_level),
             pointBorderColor: 'transparent',
             pointBackgroundColor: 'transparent'
           },
@@ -109,7 +111,7 @@ const CompetenciesRadarChart = (props: RadarProps) => {
             label: users[1].name,
             borderColor: 'transparent',
             backgroundColor: gradientBlue,
-            data: users[1].compentencies.map((compentency: UserCompetency) => compentency.proficiency_level),
+            data: users[1].competencies.map((compentency: UserCompetency) => compentency.proficiency_level),
             pointBorderColor: 'transparent',
             pointBackgroundColor: 'transparent'
           }
@@ -118,7 +120,7 @@ const CompetenciesRadarChart = (props: RadarProps) => {
 
       setChartData(chartData)
     }
-  }, [])
+  }, [users])
 
   return (
     <Card>

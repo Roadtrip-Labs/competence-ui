@@ -28,11 +28,13 @@ const Home = () => {
 
   // ** States
   const dispatch = useDispatch<AppDispatch>()
-  const store = useSelector((state: RootState) => state)
+  const store = useSelector((state: RootState) => state.users)
 
   useEffect(() => {
-    dispatch(getUserCompetencies()).unwrap().catch((e) => console.log(e))
-  }, [])
+    dispatch(getUserCompetencies()).unwrap()
+  }, [dispatch])
+
+  console.log('Store Home: ', store)
 
   // Vars
   const borderColor = theme.palette.divider
