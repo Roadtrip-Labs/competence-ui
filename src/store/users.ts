@@ -58,7 +58,7 @@ const usersSlice = createSlice({
       state.status = UserCompetenciesStatus.SUCCESS
       state.users = action.payload
     })
-    builder.addCase(getUserCompetencies.rejected, (state, action) => {
+    builder.addCase(getUserCompetencies.rejected, state => {
       state.status = UserCompetenciesStatus.FAILURE
     })
   }
