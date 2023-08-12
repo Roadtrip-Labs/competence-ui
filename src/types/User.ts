@@ -6,14 +6,23 @@ export type User = {
 
 export type Users = User[]
 
-export type UserCompetency = {
+export type Competency = {
   id: number
   name: string
   description: string
+  category: string
+  user_competencies: UserCompetency[]
+}
+
+export type UserCompetency = {
+  id: number
+  competency_id: number
+  name: string
+  description: string
+  category: string
   proficiency_level: number
   goal_level: number
   relevance_level: number
   created_at: string
   updated_at: string
-  user_id: number
 }
