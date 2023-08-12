@@ -3,16 +3,21 @@ import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
 
 // ** Reducers
-import { usersApi } from 'src/store/users'
+import { usersApi } from './users'
+import { usersCompetencyApi } from './usersCompetency'
 
 export const store = configureStore({
   reducer: {
-    [usersApi.reducerPath]: usersApi.reducer
+    [usersApi.reducerPath]: usersApi.reducer,
+    [usersCompetencyApi.reducerPath]: usersCompetencyApi.reducer
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false
-    }).concat(usersApi.middleware),
+    }).concat(
+      usersApi.middleware,
+      usersCompetencyApi.middleware
+    ),
   devTools: process.env.NODE_ENV !== 'production'
 })
 
