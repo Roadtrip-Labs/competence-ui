@@ -1,10 +1,3 @@
-// ** React Import
-import { useEffect } from 'react'
-
-// ** Redux Imports
-import { useSelector, useDispatch } from 'react-redux'
-import { RootState, AppDispatch } from 'src/store'
-
 // ** Next Import
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -18,10 +11,10 @@ import Typography from '@mui/material/Typography'
 import PageHeader from 'src/@core/components/page-header'
 
 // ** Components Imports
-import UserCompetenciesTable from 'src/views/competencies/ComeptenciesTableSelection'
+import UserCompetenciesTable from 'src/views/competencies/CompetenciesTable'
 
 // ** Store & Actions
-import { getUserCompetencies } from 'src/store/users'
+import { useGetUserByIdQuery } from 'src/store/users'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -35,19 +28,9 @@ const Profile = () => {
   const id = router.query.slug ? Number(router.query.slug[0]) : 0
 
   // ** State
-  const dispatch = useDispatch<AppDispatch>()
   console.log('Getting competencies for user: ', id)
-  useEffect(() => {
-    dispatch(getUserCompetencies()).unwrap()
-  }, [dispatch])
-  const store = useSelector((state: RootState) => state.users)
-  console.log('Store table: ', store)
-  const user = store.users.find(user => user.user_id === id)
-  console.log('Table User: ', user)
-
-  if (!user) {
-    return <div>Loading...</div>
-  }
+  const { data: userById, isLoading, isError } = useGetUserByIdQuery(id)
+  console.log('userById', userById)
 
   return (
     <Grid container spacing={6}>
@@ -55,7 +38,13 @@ const Profile = () => {
         title={
           <Typography variant='h5'>
             <LinkStyled href='https://mui.com/x/react-data-grid/' target='_blank'>
-              {user?.name}
+              {isLoading ? (
+                "Loading..."
+              ) : isError ? (
+                "Error..."
+              ) : userById ? (
+                userById.name
+              ) : null}
             </LinkStyled>
           </Typography>
         }
@@ -66,7 +55,13 @@ const Profile = () => {
         }
       />
       <Grid item xs={12}>
-        <UserCompetenciesTable user={user} />
+        {isLoading ? (
+          <Typography>Loading...</Typography>
+        ) : isError ? (
+          <Typography>Error...</Typography>
+        ) : userById ? (
+          <UserCompetenciesTable userId={id} />
+        ) : null}
       </Grid>
     </Grid>
   )

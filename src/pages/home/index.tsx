@@ -1,6 +1,3 @@
-// ** React Imports
-import { useEffect } from 'react'
-
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
@@ -9,32 +6,31 @@ import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import { useTheme } from '@mui/material/styles'
 
-// ** Redux Imports
-import { useSelector, useDispatch } from 'react-redux'
-import { RootState, AppDispatch } from 'src/store'
-
 // ** Store & Actions
-import { getUserCompetencies } from 'src/store/users'
+import { useGetUsersQuery } from 'src/store/users'
 
 // ** Components Imports
 import CompetenciesRadarChart from 'src/views/competencies/CompetenciesRadarChart'
 
 // ** Third Party Styles Import
 import 'chart.js/auto'
+import { useEffect } from 'react'
 
 const Home = () => {
   // ** Hook
   const theme = useTheme()
 
-  // ** States
-  const dispatch = useDispatch<AppDispatch>()
-  const store = useSelector((state: RootState) => state.users)
-
+  const { data: users, isLoading, isError, refetch } = useGetUsersQuery()
   useEffect(() => {
-    dispatch(getUserCompetencies()).unwrap()
-  }, [dispatch])
+    const onFocus = () => {
+      refetch()
+    }
+    window.addEventListener('focus', onFocus)
 
-  console.log('Store Home: ', store)
+    return () => {
+      window.removeEventListener('focus', onFocus)
+    }
+  }, [refetch])
 
   // Vars
   const borderColor = theme.palette.divider
@@ -53,12 +49,18 @@ const Home = () => {
         </Card>
       </Grid>
       <Grid item xs={12} md={12}>
-        <CompetenciesRadarChart
-          users={store.users}
-          labelColor={labelColor}
-          legendColor={legendColor}
-          borderColor={borderColor}
-        />
+        {isLoading ? (
+            <Typography>Loading...</Typography>
+        ) : isError ? (
+          <Typography>Error...</Typography>
+        ) : users ? (
+          <CompetenciesRadarChart
+            users={users}
+            labelColor={labelColor}
+            legendColor={legendColor}
+            borderColor={borderColor}
+          />
+        ) : null}
       </Grid>
     </Grid>
   )

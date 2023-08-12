@@ -45,6 +45,15 @@ const CompetenciesRadarChart = (props: RadarProps) => {
         data: [40, 100, 40, 90, 40, 90],
         pointBorderColor: 'transparent',
         pointBackgroundColor: 'transparent'
+      },
+      {
+        fill: true,
+        label: 'Raghu Betina',
+        borderColor: 'transparent',
+        backgroundColor: labelColor,
+        data: [25, 59, 90, 81, 60, 82],
+        pointBorderColor: 'transparent',
+        pointBackgroundColor: 'transparent'
       }
     ]
   })
@@ -94,28 +103,23 @@ const CompetenciesRadarChart = (props: RadarProps) => {
       gradientRed.addColorStop(0, 'rgba(255,161,161, 0.9)')
       gradientRed.addColorStop(1, 'rgba(255,161,161, 0.8)')
 
+      const gradientGreen = chartRef.current.ctx.createLinearGradient(0, 0, 0, 150)
+      gradientGreen.addColorStop(0, 'rgba(0,201,167, 0.9)')
+      gradientGreen.addColorStop(1, 'rgba(0,201,167, 0.8)')
+
+      const gradients = [gradientBlue, gradientRed, gradientGreen]
+
       const chartData = {
         labels: users[0].competencies.map((compentency: UserCompetency) => compentency.name),
-        datasets: [
-          {
-            fill: true,
-            label: users[0].name,
-            borderColor: 'transparent',
-            backgroundColor: gradientRed,
-            data: users[0].competencies.map((compentency: UserCompetency) => compentency.proficiency_level),
-            pointBorderColor: 'transparent',
-            pointBackgroundColor: 'transparent'
-          },
-          {
-            fill: true,
-            label: users[1].name,
-            borderColor: 'transparent',
-            backgroundColor: gradientBlue,
-            data: users[1].competencies.map((compentency: UserCompetency) => compentency.proficiency_level),
-            pointBorderColor: 'transparent',
-            pointBackgroundColor: 'transparent'
-          }
-        ]
+        datasets: users.map((user) => ({
+          fill: true,
+          label: user.name,
+          borderColor: 'transparent',
+          backgroundColor: gradients[users.indexOf(user)],
+          data: user.competencies.map((compentency: UserCompetency) => compentency.proficiency_level),
+          pointBorderColor: 'transparent',
+          pointBackgroundColor: 'transparent'
+        }))
       }
 
       setChartData(chartData)

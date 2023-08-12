@@ -17,6 +17,11 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Max',
       path: '/profile/2',
       icon: 'mdi:person'
+    },
+    {
+      title: 'Raghu',
+      path: '/profile/3',
+      icon: 'mdi:person'
     }
   ]
 }
