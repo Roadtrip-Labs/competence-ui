@@ -11,6 +11,8 @@ import { useState } from 'react'
 import { UserCompetency } from 'src/types/User'
 import { usersApi } from 'src/store/users'
 
+import { useUpdateUserCompetency } from './CompetenciesTableHook'
+
 const columns: GridColumns = [
   {
     flex: 0.25,
@@ -19,6 +21,7 @@ const columns: GridColumns = [
     headerName: 'Name',
     renderCell: (params: GridRenderCellParams) => {
       const { row } = params
+
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -89,28 +92,12 @@ const columns: GridColumns = [
   }
 ]
 
-type UserCompetenciesTableParams = {
+export type UserCompetenciesTableParams = {
   userId: number
 }
 
 const UserCompetenciesTable = (params: UserCompetenciesTableParams) => {
-  const [useUpdateCompetencyMutation, { data, error, isLoading }] = usersCompetencyApi.useUpdateCompetencyMutation()
-  const { refetch: refetchUsers } = usersApi.useGetUsersQuery()
-  const {
-    data: competencyData,
-    error: competencyError,
-    isLoading: competencyIsLoading
-  } = usersCompetencyApi.useGetUserCompetenciesQuery(params.userId)
-
-  const updateUserCompetency = async (updatedCompetency: any) => {
-    console.log('updateUserCompetency: ', params)
-    const updatedRow = { ...currentlyEditingRow, [updatedCompetency.field]: updatedCompetency.value }
-    console.log('mySaveOnServerFunction: ', updatedRow)
-    await useUpdateCompetencyMutation({ userId: params.userId, competency: updatedRow })
-    refetchUsers()
-  }
-
-  const [currentlyEditingRow, setCurrentlyEditingRow] = useState<UserCompetency>()
+  const { handleUpdatedCompetency, setCurrentlyEditingRow, competencyData } = useUpdateUserCompetency(params)
 
   return (
     <Card>
@@ -122,7 +109,7 @@ const UserCompetenciesTable = (params: UserCompetenciesTableParams) => {
           columns={columns}
           rows={competencyData}
           rowsPerPageOptions={[5, 10, 20]}
-          onCellEditCommit={params => updateUserCompetency(params)}
+          onCellEditCommit={params => handleUpdatedCompetency(params)}
           onCellEditStart={params => setCurrentlyEditingRow(params.row as UserCompetency)}
         />
       ) : (

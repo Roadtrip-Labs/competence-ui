@@ -20,12 +20,13 @@ const Home = () => {
   // ** Hook
   const theme = useTheme()
 
-  const { data: users, isLoading, isSuccess, isError, refetch } = useGetUsersQuery()
+  const { data: users, isLoading, isError, refetch } = useGetUsersQuery()
   useEffect(() => {
     const onFocus = () => {
       refetch()
     }
     window.addEventListener('focus', onFocus)
+
     return () => {
       window.removeEventListener('focus', onFocus)
     }

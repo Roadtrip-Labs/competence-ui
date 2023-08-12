@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography'
 import PageHeader from 'src/@core/components/page-header'
 
 // ** Components Imports
-import UserCompetenciesTable from 'src/views/competencies/ComeptenciesTableSelection'
+import UserCompetenciesTable from 'src/views/competencies/CompetenciesTable'
 
 // ** Store & Actions
 import { useGetUserByIdQuery } from 'src/store/users'
@@ -29,7 +29,7 @@ const Profile = () => {
 
   // ** State
   console.log('Getting competencies for user: ', id)
-  const { data: userById, isLoading, isSuccess, isError } = useGetUserByIdQuery(id)
+  const { data: userById, isLoading, isError } = useGetUserByIdQuery(id)
   console.log('userById', userById)
 
   return (

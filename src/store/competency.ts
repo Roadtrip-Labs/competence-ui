@@ -11,10 +11,11 @@ export const competencyApi = createApi({
   reducerPath: 'competencyApi',
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
-    prepareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers) => {
       headers.set('Access-Control-Allow-Origin', '*')
       headers.set('Access-Control-Request-Headers', 'X-Requested-With')
       headers.set('Content-Type', 'application/json')
+
       return headers
     }
   }),
