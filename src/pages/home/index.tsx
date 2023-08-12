@@ -14,14 +14,22 @@ import CompetenciesRadarChart from 'src/views/competencies/CompetenciesRadarChar
 
 // ** Third Party Styles Import
 import 'chart.js/auto'
+import { useEffect } from 'react'
 
 const Home = () => {
   // ** Hook
   const theme = useTheme()
 
-  const { data: users, isLoading, isSuccess, isError } = useGetUsersQuery()
-  console.log('users', users)
-
+  const { data: users, isLoading, isSuccess, isError, refetch } = useGetUsersQuery()
+  useEffect(() => {
+    const onFocus = () => {
+      refetch()
+    }
+    window.addEventListener('focus', onFocus)
+    return () => {
+      window.removeEventListener('focus', onFocus)
+    }
+  }, [refetch])
 
   // Vars
   const borderColor = theme.palette.divider

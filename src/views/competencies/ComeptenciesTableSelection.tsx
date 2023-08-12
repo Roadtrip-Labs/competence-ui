@@ -6,7 +6,10 @@ import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid'
 
 // ** Data Import
-import { User } from 'src/types/User'
+import { usersCompetencyApi } from 'src/store/usersCompetency'
+import { useState } from 'react'
+import { UserCompetency } from 'src/types/User'
+import { usersApi } from 'src/store/users'
 
 const columns: GridColumns = [
   {
@@ -16,7 +19,6 @@ const columns: GridColumns = [
     headerName: 'Name',
     renderCell: (params: GridRenderCellParams) => {
       const { row } = params
-
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -27,6 +29,17 @@ const columns: GridColumns = [
         </Box>
       )
     }
+  },
+  {
+    flex: 0.25,
+    minWidth: 120,
+    headerName: 'Category',
+    field: 'category',
+    renderCell: (params: GridRenderCellParams) => (
+      <Typography variant='body2' sx={{ color: 'text.primary' }}>
+        {params.row.category}
+      </Typography>
+    )
   },
   {
     flex: 0.175,
@@ -40,8 +53,9 @@ const columns: GridColumns = [
     )
   },
   {
-    flex: 0.175,
+    flex: 0.10,
     minWidth: 110,
+    editable: true,
     field: 'proficiency_level',
     headerName: 'Proficiency Level',
     renderCell: (params: GridRenderCellParams) => (
@@ -51,9 +65,10 @@ const columns: GridColumns = [
     )
   },
   {
-    flex: 0.125,
-    field: 'goal_level',
+    flex: 0.10,
     minWidth: 80,
+    editable: true,
+    field: 'goal_level',
     headerName: 'Goal Level',
     renderCell: (params: GridRenderCellParams) => (
       <Typography variant='body2' sx={{ color: 'text.primary' }}>
@@ -62,7 +77,7 @@ const columns: GridColumns = [
     )
   },
   {
-    flex: 0.175,
+    flex: 0.125,
     minWidth: 110,
     field: 'updated_at',
     headerName: 'Last Updated',
@@ -75,25 +90,46 @@ const columns: GridColumns = [
 ]
 
 type UserCompetenciesTableParams = {
-  user: User
+  userId: number
 }
 
 const UserCompetenciesTable = (params: UserCompetenciesTableParams) => {
+  const [useUpdateCompetencyMutation, { data, error, isLoading }] = usersCompetencyApi.useUpdateCompetencyMutation()
+  const { refetch: refetchUsers } = usersApi.useGetUsersQuery()
+  const {
+    data: competencyData,
+    error: competencyError,
+    isLoading: competencyIsLoading
+  } = usersCompetencyApi.useGetUserCompetenciesQuery(params.userId)
+
+  const updateUserCompetency = async (updatedCompetency: any) => {
+    console.log('updateUserCompetency: ', params)
+    const updatedRow = { ...currentlyEditingRow, [updatedCompetency.field]: updatedCompetency.value }
+    console.log('mySaveOnServerFunction: ', updatedRow)
+    await useUpdateCompetencyMutation({ userId: params.userId, competency: updatedRow })
+    refetchUsers()
+  }
+
+  const [currentlyEditingRow, setCurrentlyEditingRow] = useState<UserCompetency>()
+
   return (
     <Card>
       <CardHeader title='User Competencies' />
-      {params.user.competencies ?
+      {competencyData ? (
         <DataGrid
           autoHeight
+          editMode='cell'
           columns={columns}
-          rows={params.user.competencies}
+          rows={competencyData}
           rowsPerPageOptions={[5, 10, 20]}
+          onCellEditCommit={params => updateUserCompetency(params)}
+          onCellEditStart={params => setCurrentlyEditingRow(params.row as UserCompetency)}
         />
-      :
+      ) : (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          No competencies found for user {params.user.name}
+          No competencies found for user {params.userId}
         </Typography>
-      }
+      )}
     </Card>
   )
 }

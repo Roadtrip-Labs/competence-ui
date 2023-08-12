@@ -60,7 +60,7 @@ const Profile = () => {
         ) : isError ? (
           <Typography>Error...</Typography>
         ) : userById ? (
-          <UserCompetenciesTable user={userById} />
+          <UserCompetenciesTable userId={id} />
         ) : null}
       </Grid>
     </Grid>
