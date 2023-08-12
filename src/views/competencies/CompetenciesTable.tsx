@@ -6,11 +6,7 @@ import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid'
 
 // ** Data Import
-import { usersCompetencyApi } from 'src/store/usersCompetency'
-import { useState } from 'react'
 import { UserCompetency } from 'src/types/User'
-import { usersApi } from 'src/store/users'
-
 import { useUpdateUserCompetency } from './CompetenciesTableHook'
 
 const columns: GridColumns = [
