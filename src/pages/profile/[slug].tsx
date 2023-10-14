@@ -25,6 +25,7 @@ const Profile = () => {
   // ** Router
   const router = useRouter()
   console.log('Router: ', router.query)
+
   // TODO: setting a default value for the id causes an extra api call
   const id = router.query.slug ? Number(router.query.slug[0]) : 0
 
